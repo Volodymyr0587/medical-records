@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRecordRequest;
@@ -11,7 +13,7 @@ class RecordController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): void
     {
         //
     }
@@ -19,7 +21,7 @@ class RecordController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -27,7 +29,7 @@ class RecordController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRecordRequest $request)
+    public function store(StoreRecordRequest $request): void
     {
         //
     }
@@ -35,7 +37,7 @@ class RecordController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Record $record)
+    public function show(Record $record): void
     {
         //
     }
@@ -43,7 +45,7 @@ class RecordController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Record $record)
+    public function edit(Record $record): void
     {
         //
     }
@@ -51,7 +53,7 @@ class RecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRecordRequest $request, Record $record)
+    public function update(UpdateRecordRequest $request, Record $record): void
     {
         //
     }
@@ -59,7 +61,7 @@ class RecordController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Record $record)
+    public function destroy(Record $record): void
     {
         //
     }

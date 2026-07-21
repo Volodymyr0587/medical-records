@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums;
 
 enum RecordStatus: string
@@ -11,7 +13,6 @@ enum RecordStatus: string
     case Completed = 'completed';
     case Cancelled = 'cancelled';
     case Archived = 'archived';
-
 
     public static function values(): array
     {

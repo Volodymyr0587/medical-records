@@ -1,7 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
-class StoreRecordRequest extends RecordRequest
-{
-}
+class StoreRecordRequest extends RecordRequest {}

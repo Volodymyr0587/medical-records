@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Enums\RecordStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Override;
 
 class RecordRequest extends FormRequest
 {
@@ -38,6 +41,7 @@ class RecordRequest extends FormRequest
     /**
      * @return array<string, string>
      */
+    #[Override]
     public function attributes(): array
     {
         return [
