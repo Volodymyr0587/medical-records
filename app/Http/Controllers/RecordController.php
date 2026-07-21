@@ -8,7 +8,9 @@ use App\Enums\RecordStatus;
 use App\Http\Requests\StoreRecordRequest;
 use App\Http\Requests\UpdateRecordRequest;
 use App\Models\Record;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class RecordController extends Controller
@@ -32,48 +34,70 @@ class RecordController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): void
+    public function create(): View
     {
-        //
+        return view('records.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRecordRequest $request): void
+    public function store(StoreRecordRequest $request): RedirectResponse
     {
-        //
+        auth()->user()
+            ->records()
+            ->create($request->validated());
+
+        return redirect()
+            ->route('records.index')
+            ->with('success', 'Record created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Record $record): void
+    public function show(Record $record): View
     {
-        //
+        Gate::authorize('update', $record);
+
+        return view('records.show', compact('record'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Record $record): void
+    public function edit(Record $record): View
     {
-        //
+        Gate::authorize('update', $record);
+
+        return view('records.edit', compact('record'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRecordRequest $request, Record $record): void
+    public function update(UpdateRecordRequest $request, Record $record): RedirectResponse
     {
-        //
+        Gate::authorize('update', $record);
+
+        $record->update($request->validated());
+
+        return redirect()
+            ->route('records.index')
+            ->with('success', 'Record updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Record $record): void
+    public function destroy(Record $record): RedirectResponse
     {
-        //
+        Gate::authorize('update', $record);
+
+        $record->delete();
+
+        return redirect()
+            ->route('records.index')
+            ->with('success', 'Record deleted successfully.');
     }
 }
