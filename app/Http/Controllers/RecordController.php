@@ -4,18 +4,29 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\RecordStatus;
 use App\Http\Requests\StoreRecordRequest;
 use App\Http\Requests\UpdateRecordRequest;
 use App\Models\Record;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class RecordController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): void
+    public function index(Request $request): View
     {
-        //
+        $records = auth()->user()
+            ->records()
+            ->search($request->string('search')->trim()->toString())
+            ->status($request->enum('status', RecordStatus::class))
+            ->latest('date_time')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('records.index', compact('records'));
     }
 
     /**

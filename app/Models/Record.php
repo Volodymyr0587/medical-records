@@ -6,8 +6,10 @@ namespace App\Models;
 
 use App\Enums\RecordStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 use Override;
 
 #[Fillable([
@@ -30,5 +32,23 @@ class Record extends Model
             'date_time' => 'datetime',
             'status' => RecordStatus::class,
         ];
+    }
+
+    #[Scope]
+    public function search(Builder $query, ?string $search): Builder
+    {
+        return $query->when(
+            filled($search),
+            fn(Builder $query) => $query->where('name', 'like', "%{$search}%")
+        );
+    }
+
+    #[Scope]
+    public function status(Builder $query, ?RecordStatus $status): Builder
+    {
+        return $query->when(
+            $status,
+            fn(Builder $query) => $query->where('status', $status)
+        );
     }
 }
