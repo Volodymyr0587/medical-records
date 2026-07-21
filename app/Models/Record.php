@@ -7,9 +7,9 @@ namespace App\Models;
 use App\Enums\RecordStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Builder;
 use Override;
 
 #[Fillable([
@@ -39,7 +39,7 @@ class Record extends Model
     {
         return $query->when(
             filled($search),
-            fn(Builder $query) => $query->where('name', 'like', "%{$search}%")
+            fn (Builder $query) => $query->where('name', 'like', "%{$search}%")
         );
     }
 
@@ -48,7 +48,7 @@ class Record extends Model
     {
         return $query->when(
             $status,
-            fn(Builder $query) => $query->where('status', $status)
+            fn (Builder $query) => $query->where('status', $status)
         );
     }
 }

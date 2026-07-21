@@ -28,7 +28,7 @@ class RecordController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('records.index', compact('records'));
+        return view('records.index', ['records' => $records]);
     }
 
     /**
@@ -60,7 +60,7 @@ class RecordController extends Controller
     {
         Gate::authorize('update', $record);
 
-        return view('records.show', compact('record'));
+        return view('records.show', ['record' => $record]);
     }
 
     /**
@@ -70,7 +70,7 @@ class RecordController extends Controller
     {
         Gate::authorize('update', $record);
 
-        return view('records.edit', compact('record'));
+        return view('records.edit', ['record' => $record]);
     }
 
     /**
