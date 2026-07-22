@@ -37,14 +37,9 @@ class Record extends Model
     #[Scope]
     public function search(Builder $query, ?string $search): Builder
     {
-        // return $query->when(
-        //     filled($search),
-        //     fn(Builder $query) => $query->whereLike('name', "%{$search}%")
-        // );
-
         return $query->when(
             filled($search),
-            fn(Builder $query) => $query->where(function (Builder $query) use ($search) {
+            fn (Builder $query) => $query->where(function (Builder $query) use ($search) {
                 $query
                     ->whereLike('name', "%{$search}%")
                     ->orWhereLike('description', "%{$search}%");
@@ -57,7 +52,7 @@ class Record extends Model
     {
         return $query->when(
             $status,
-            fn(Builder $query) => $query->where('status', $status)
+            fn (Builder $query) => $query->where('status', $status)
         );
     }
 }
