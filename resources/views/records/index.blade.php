@@ -39,6 +39,6 @@
                 </div>
             @endforelse
         </div>
-        {{ $records->links() }}
+        {{ $records->links('pagination.custom-tailwind') }}
     </div>
 </x-layouts::app>
