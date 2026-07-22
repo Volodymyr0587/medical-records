@@ -62,9 +62,13 @@ class RecordController extends Controller
             ->records()
             ->create($request->validated());
 
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 5000)
+            ->success('Record created successfully.');
+
         return redirect()
-            ->route('records.index')
-            ->with('success', 'Record created successfully.');
+            ->route('records.index');
     }
 
     /**
