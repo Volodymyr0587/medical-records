@@ -35,13 +35,13 @@ enum RecordStatus: string
     public function color(): string
     {
         return match ($this) {
-            self::Planned => 'gray',
+            self::Planned => 'indigo',
             self::Confirmed => 'blue',
             self::InProgress => 'orange',
             self::Postponed => 'yellow',
             self::Completed => 'green',
             self::Cancelled => 'red',
-            self::Archived => 'slate',
+            self::Archived => 'gray',
         };
     }
 }

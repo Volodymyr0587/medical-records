@@ -10,6 +10,15 @@
             </flux:button>
         </div>
 
+        @if(request()->filled('status'))
+            <div>
+                <flux:button href="{{ route('records.index', request()->except('status', 'page')) }}" variant="primary"
+                    color="zinc">
+                    ✕ Reset
+                </flux:button>
+            </div>
+        @endif
+
 
         <flux:separator variant="subtle" />
         <div class="grid auto-rows-min gap-4 md:grid-cols-1">
@@ -17,7 +26,11 @@
                 <flux:callout color="{{ $record->status->color() }}" inline>
                     <div class="flex items-center justify-between">
                         <div>
-                            <flux:badge color="{{ $record->status->color() }}">{{ $record->status->label() }}</flux:badge>
+                            <a
+                                href="{{ route('records.index', array_merge(request()->except('page'), ['status' => $record->status->value])) }}">
+                                <flux:badge color="{{ $record->status->color() }}">{{ $record->status->label() }}
+                                </flux:badge>
+                            </a>
                             <flux:callout.heading class="mt-6">{{ $record->name }}</flux:callout.heading>
                             <span
                                 class="text-xs font-extrabold">{{ $record->date_time->translatedFormat('d F Y l H:i') }}</span>
