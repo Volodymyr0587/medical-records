@@ -28,7 +28,21 @@ class RecordController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('records.index', ['records' => $records]);
+        $partOfDay = $this->getPartOfDay();
+
+        return view('records.index', ['records' => $records, 'partOfDay' => $partOfDay]);
+    }
+
+    private function getPartOfDay(): string
+    {
+        $time = now()->hour;
+        $partOfDay = match (true) {
+            $time >= 5 && $time < 12 => 'morning',
+            $time >= 12 && $time < 17 => 'afternoon',
+            $time >= 17 && $time < 21 => 'evening',
+            default => 'night',
+        };
+        return $partOfDay;
     }
 
     /**
