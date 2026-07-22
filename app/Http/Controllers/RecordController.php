@@ -28,6 +28,14 @@ class RecordController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $statusCounts = auth()->user()
+            ->records()
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        $totalRecords = auth()->user()->records()->count();
+
         $partOfDay = $this->getPartOfDay();
 
         return view('records.index', [
@@ -35,6 +43,8 @@ class RecordController extends Controller
             'partOfDay' => $partOfDay,
             'statuses' => RecordStatus::cases(),
             'selectedStatus' => $request->enum('status', RecordStatus::class),
+            'statusCounts' => $statusCounts,
+            'totalRecords' => $totalRecords,
         ]);
     }
 

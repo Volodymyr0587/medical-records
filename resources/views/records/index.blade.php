@@ -55,7 +55,7 @@
             {{-- All --}}
             <a href="{{ route('records.index', request()->except('status', 'page')) }}">
                 <flux:badge color="zinc" variant="{{ $selectedStatus == '' ? 'solid' : '' }}">
-                    All
+                    All <span class="ml-1 font-bold">{{ $totalRecords }}</span>
                 </flux:badge>
             </a>
 
@@ -70,6 +70,9 @@
                             <flux:badge color="{{ $status->color() }}" variant="{{ $selectedStatus === $status ? 'solid' : '' }}"
                                 size="{{ $selectedStatus === $status ? 'lg' : '' }}">
                                 {{ $status->label() }}
+                                <span class="ml-1 font-bold">
+                                    {{ $statusCounts[$status->value] ?? 0 }}
+                                </span>
                             </flux:badge>
                         </a>
             @endforeach
@@ -90,7 +93,7 @@
 
                             <flux:callout.heading class="mt-6">{{ $record->name }}</flux:callout.heading>
                             <span class="text-xs font-extrabold">{{ $record->date_time->translatedFormat('d F Y l H:i')
-                                                                                        }}</span>
+                                                                                                        }}</span>
                             <flux:callout.text>
                                 {{ Str::words($record->description, 5) }}
                             </flux:callout.text>
