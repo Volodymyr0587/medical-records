@@ -12,13 +12,20 @@
 
 
         <flux:separator variant="subtle" />
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div class="grid auto-rows-min gap-4 md:grid-cols-1">
             @forelse ($records as $record)
-                <flux:callout icon="pencil-square" color="lime" inline>
-                    <flux:callout.heading>{{ $record->name }}</flux:callout.heading>
-                    <flux:badge icon="clock" size="sm">{{ $record->date_time->translatedFormat('d F Y l H:i') }}
-                    </flux:badge>
-
+                <flux:callout color="{{ $record->status->color() }}" inline>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <flux:badge color="{{ $record->status->color() }}">{{ $record->status->label() }}</flux:badge>
+                            <flux:callout.heading class="mt-6">{{ $record->name }}</flux:callout.heading>
+                            <span
+                                class="text-xs font-extrabold">{{ $record->date_time->translatedFormat('d F Y l H:i') }}</span>
+                            <flux:callout.text>
+                                {{ Str::words($record->description, 5) }}
+                            </flux:callout.text>
+                        </div>
+                    </div>
                 </flux:callout>
             @empty
                 <div>
@@ -31,7 +38,7 @@
                     </flux:text>
                 </div>
             @endforelse
-
         </div>
+        {{ $records->links() }}
     </div>
 </x-layouts::app>

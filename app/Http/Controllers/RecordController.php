@@ -25,7 +25,7 @@ class RecordController extends Controller
             ->search($request->string('search')->trim()->toString())
             ->status($request->enum('status', RecordStatus::class))
             ->latest('date_time')
-            ->paginate(15)
+            ->paginate(10)
             ->withQueryString();
 
         $partOfDay = $this->getPartOfDay();
@@ -100,9 +100,13 @@ class RecordController extends Controller
 
         $record->update($request->validated());
 
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 5000)
+            ->success('Record updated successfully.');
+
         return redirect()
-            ->route('records.index')
-            ->with('success', 'Record updated successfully.');
+            ->route('records.index');
     }
 
     /**
@@ -114,8 +118,12 @@ class RecordController extends Controller
 
         $record->delete();
 
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 5000)
+            ->success('Record deleted successfully.');
+
         return redirect()
-            ->route('records.index')
-            ->with('success', 'Record deleted successfully.');
+            ->route('records.index');
     }
 }
