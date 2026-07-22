@@ -1,39 +1,96 @@
 <x-layouts::app :title="__('Records')">
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <flux:heading size="xl" level="1">Good {{ $partOfDay }}, {{ auth()->user()->name }}</flux:heading>
+    <div class="flex h-full w-full flex-1 flex-col gap-6 rounded-xl">
+
+        {{-- Header --}}
         <div>
-            <flux:text class="mt-2 mb-6 text-base">Here is what's new in your records today,
+            <flux:heading size="xl" level="1">
+                Good {{ $partOfDay }}, {{ auth()->user()->name }}
+            </flux:heading>
+
+            <flux:text class="mt-2 text-base">
+                Here is what's new in your records today,
                 {{ now()->format('l, F j, Y') }}
             </flux:text>
-            <flux:button href="{{ route('records.create') }}" variant="primary" color="lime" icon="plus-circle">
-                Add new record
-            </flux:button>
         </div>
 
-        @if(request()->filled('status'))
-            <div>
-                <flux:button href="{{ route('records.index', request()->except('status', 'page')) }}" variant="primary"
-                    color="zinc">
-                    ✕ Reset
-                </flux:button>
-            </div>
-        @endif
+        {{-- Toolbar --}}
+        <div class="flex flex-wrap items-center justify-between gap-4">
 
+            <div class="flex flex-wrap items-center gap-3">
+
+                <flux:button href="{{ route('records.create') }}" variant="primary" color="lime" icon="plus-circle">
+                    Add new record
+                </flux:button>
+
+                <form method="GET">
+                    @if($selectedStatus)
+                        <input type="hidden" name="status" value="{{ $selectedStatus->value }}">
+                    @endif
+
+                    <flux:input name="search" value="{{ request('search') }}" placeholder="Search records..." clearable
+                        oninput="
+                            clearTimeout(window.searchTimer);
+                            window.searchTimer = setTimeout(() => this.form.submit(), 400);
+                        " />
+                </form>
+
+            </div>
+
+            @if(request()->filled('search'))
+                <flux:button href="{{ route('records.index', ['status' => $selectedStatus?->value]) }}" variant="ghost"
+                    color="zinc">
+                    ✕ Clear search
+                </flux:button>
+            @endif
+
+        </div>
+
+        {{-- Status filter --}}
+        <div class="flex flex-wrap items-center gap-2">
+
+            <span class="text-sm font-medium text-zinc-500">
+                Status:
+            </span>
+
+            {{-- All --}}
+            <a href="{{ route('records.index', request()->except('status', 'page')) }}">
+                <flux:badge color="zinc" variant="{{ $selectedStatus == '' ? 'solid' : '' }}">
+                    All
+                </flux:badge>
+            </a>
+
+            @foreach($statuses as $status)
+                        <a href="{{ route(
+                    'records.index',
+                    array_merge(
+                        request()->except('page'),
+                        ['status' => $status->value]
+                    )
+                ) }}">
+                            <flux:badge color="{{ $status->color() }}" variant="{{ $selectedStatus === $status ? 'solid' : '' }}"
+                                size="{{ $selectedStatus === $status ? 'lg' : '' }}">
+                                {{ $status->label() }}
+                            </flux:badge>
+                        </a>
+            @endforeach
+
+        </div>
 
         <flux:separator variant="subtle" />
-        <div class="grid auto-rows-min gap-4 md:grid-cols-1">
+
+        {{-- Records --}}
+        <div class="grid gap-4">
+
             @forelse ($records as $record)
                 <flux:callout color="{{ $record->status->color() }}" inline>
                     <div class="flex items-center justify-between">
                         <div>
-                            <a
-                                href="{{ route('records.index', array_merge(request()->except('page'), ['status' => $record->status->value])) }}">
-                                <flux:badge color="{{ $record->status->color() }}">{{ $record->status->label() }}
-                                </flux:badge>
-                            </a>
+                            <flux:badge color="{{ $record->status->color() }}">{{ $record->status->label() }}
+                            </flux:badge>
+
                             <flux:callout.heading class="mt-6">{{ $record->name }}</flux:callout.heading>
-                            <span
-                                class="text-xs font-extrabold">{{ $record->date_time->translatedFormat('d F Y l H:i') }}</span>
+                            <span class="text-xs font-extrabold">{{ $record->date_time->translatedFormat('d F Y l H:i')
+                                                                                        }}</span>
                             <flux:callout.text>
                                 {{ Str::words($record->description, 5) }}
                             </flux:callout.text>
@@ -51,7 +108,10 @@
                     </flux:text>
                 </div>
             @endforelse
+
         </div>
+
         {{ $records->links('pagination.custom-tailwind') }}
+
     </div>
 </x-layouts::app>

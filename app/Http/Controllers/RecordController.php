@@ -30,7 +30,12 @@ class RecordController extends Controller
 
         $partOfDay = $this->getPartOfDay();
 
-        return view('records.index', ['records' => $records, 'partOfDay' => $partOfDay]);
+        return view('records.index', [
+            'records' => $records,
+            'partOfDay' => $partOfDay,
+            'statuses' => RecordStatus::cases(),
+            'selectedStatus' => $request->enum('status', RecordStatus::class),
+        ]);
     }
 
     private function getPartOfDay(): string
