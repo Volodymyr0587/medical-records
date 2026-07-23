@@ -44,4 +44,17 @@ enum RecordStatus: string
             self::Archived => 'gray',
         };
     }
+
+    public function hoverColor(): string
+    {
+        return match ($this) {
+            self::Planned => 'hover:bg-indigo-600',
+            self::Confirmed => 'hover:bg-blue-600',
+            self::InProgress => 'hover:bg-orange-600',
+            self::Postponed => 'hover:bg-yellow-600',
+            self::Completed => 'hover:bg-green-600',
+            self::Cancelled => 'hover:bg-red-600',
+            self::Archived => 'hover:bg-gray-600',
+        };
+    }
 }

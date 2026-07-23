@@ -85,21 +85,24 @@
         <div class="grid gap-4">
 
             @forelse ($records as $record)
-                <flux:callout color="{{ $record->status->color() }}" inline>
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <flux:badge color="{{ $record->status->color() }}">{{ $record->status->label() }}
-                            </flux:badge>
+                <a href="{{ route('records.show', $record) }}">
+                    <flux:callout color="{{ $record->status->color() }}" inline class="{{ $record->status->hoverColor() }}">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <flux:badge color="{{ $record->status->color() }}">{{ $record->status->label() }}
+                                </flux:badge>
 
-                            <flux:callout.heading class="mt-6">{{ $record->name }}</flux:callout.heading>
-                            <span class="text-xs font-extrabold">{{ $record->date_time->translatedFormat('d F Y l H:i')
-                                                                                                        }}</span>
-                            <flux:callout.text>
-                                {{ Str::words($record->description, 5) }}
-                            </flux:callout.text>
+                                <flux:callout.heading class="mt-6">{{ $record->name }}</flux:callout.heading>
+                                <span
+                                    class="text-xs font-extrabold">{{ $record->date_time->translatedFormat('d F Y l H:i')}}
+                                </span>
+                                <flux:callout.text>
+                                    {{ Str::words($record->description, 5) }}
+                                </flux:callout.text>
+                            </div>
                         </div>
-                    </div>
-                </flux:callout>
+                    </flux:callout>
+                </a>
             @empty
                 <div>
                     <flux:heading>🙃 Oops</flux:heading>

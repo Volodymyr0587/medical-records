@@ -1,27 +1,29 @@
 <x-layouts::app :title="__('Records')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <flux:heading size="xl" level="1">Create new record.</flux:heading>
-        <flux:text class="mt-2 mb-6 text-base">Here you can create a record.
+        <flux:heading size="xl" level="1">Edit record: {{ $record->name }}</flux:heading>
+        <flux:text class="mt-2 mb-6 text-base">Here you can edit a record.
         </flux:text>
 
         <flux:separator variant="subtle" />
 
 
-        <form method="POST" action="{{ route('records.store') }}" class="flex flex-col gap-6">
+        <form method="POST" action="{{ route('records.update', $record) }}" class="flex flex-col gap-6">
             @csrf
+            @method('PATCH')
             <!-- Name -->
-            <flux:input name="name" :label="__('Name')" :value="old('name')" type="text" autofocus autocomplete="name"
-                :placeholder="__('Dental appointment')" />
+            <flux:input name="name" :label="__('Name')" value="{{ old('name', $record->name) }}" type="text" autofocus
+                autocomplete="name" :placeholder="__('Dental appointment')" />
 
             <!-- Description -->
-            <flux:textarea label="Description" name="description" :value="old('description')"
-                placeholder="Professional teeth cleaning" />
+            <flux:textarea label="Description" name="description" placeholder="Professional teeth cleaning">
+                {{ old('description', $record->description) }}</flux:textarea>
 
             <!-- Date & time-->
             <flux:field>
                 <flux:label>Date & Time</flux:label>
 
-                <flux:input type="datetime-local" name="date_time" value="{{ old('date_time') }}" class="flux-input" />
+                <flux:input type="datetime-local" name="date_time" value="{{ old('date_time', $record->date_time) }}"
+                    class="flux-input" />
 
                 <flux:error name="date_time" />
             </flux:field>
@@ -36,7 +38,7 @@
 
             <div class="items-center justify-end">
                 <flux:button type="submit" variant="primary" class="w-full">
-                    {{ __('Create record') }}
+                    {{ __('Update record') }}
                 </flux:button>
             </div>
         </form>
