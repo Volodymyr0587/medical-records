@@ -40,9 +40,54 @@
             </flux:badge>
         </div>
         <flux:separator variant="subtle" />
-        {{-- Records --}}
+        {{-- Description --}}
         <div class="">
             {{ $record->description }}
         </div>
+
+        {{-- Images --}}
+        @if ($record->getMedia('images')->isNotEmpty())
+            <div class="grid grid-cols-4 gap-3">
+                @foreach ($record->getMedia('images') as $media)
+                    <div class="relative group">
+                        @can('update', $record)
+                            <a href="{{ $media->getUrl() }}" target="_blank">
+                                <img src="{{ $media->getUrl('thumb') }}" alt="{{ $media->name }}"
+                                    class="rounded-lg object-cover w-full h-32">
+                            </a>
+                            <form method="POST" action="{{ route('records.media.destroy', [$record, $media]) }}">
+                                @csrf @method('DELETE')
+                                <button type="submit"
+                                    class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 text-xs">
+                                    &times;
+                                </button>
+                            </form>
+                        @endcan
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+        {{-- Docs --}}
+        @if ($record->getMedia('files')->isNotEmpty())
+            <ul class="divide-y">
+                @foreach ($record->getMedia('files') as $media)
+                    <li class="flex items-center justify-between py-2">
+                        @can('update', $record)
+                            <a href="{{ $media->getUrl() }}" target="_blank" class="text-blue-600 hover:underline">
+                                <flux:badge color="{{ $record->status->color() }}" variant="solid" size="sm">
+                                    {{ $media->human_readable_size }}
+                                </flux:badge>
+                                {{ $media->file_name }}
+                            </a>
+                            <form method="POST" action="{{ route('records.media.destroy', [$record, $media]) }}">
+                                @csrf @method('DELETE')
+                                <flux:button variant="danger" type="submit" size="xs">Delete</flux:button>
+                            </form>
+                        @endcan
+                    </li>
+                @endforeach
+            </ul>
+        @endif
     </div>
 </x-layouts::app>

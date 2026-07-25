@@ -7,7 +7,8 @@
         <flux:separator variant="subtle" />
 
 
-        <form method="POST" action="{{ route('records.update', $record) }}" class="flex flex-col gap-6">
+        <form method="POST" action="{{ route('records.update', $record) }}" class="flex flex-col gap-6"
+            enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <!-- Name -->
@@ -16,7 +17,8 @@
 
             <!-- Description -->
             <flux:textarea label="Description" name="description" placeholder="Professional teeth cleaning">
-                {{ old('description', $record->description) }}</flux:textarea>
+                {{ old('description', $record->description) }}
+            </flux:textarea>
 
             <!-- Date & time-->
             <flux:field>
@@ -34,6 +36,23 @@
                         :checked="old('status', $record->status->value ?? \App\Enums\RecordStatus::Planned->value) === $status->value" />
                 @endforeach
             </flux:radio.group>
+
+            <flux:field>
+                <flux:label>Images</flux:label>
+
+                <flux:input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/webp"
+                    class="flux-input" />
+
+                <flux:error name="images" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Files</flux:label>
+
+                <flux:input type="file" name="files[]" multiple class="flux-input" />
+
+                <flux:error name="files" />
+            </flux:field>
 
 
             <div class="items-center justify-end">

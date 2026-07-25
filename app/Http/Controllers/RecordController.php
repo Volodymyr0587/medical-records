@@ -73,9 +73,15 @@ class RecordController extends Controller
      */
     public function store(StoreRecordRequest $request): RedirectResponse
     {
-        auth()->user()
+        $record = auth()->user()
             ->records()
-            ->create($request->validated());
+            ->create($request->safe()->except(['images', 'files']));
+
+        collect($request->file('images'))
+            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('images'));
+
+        collect($request->file('files'))
+            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('files'));
 
         flash()
             ->option('position', 'bottom-right')
@@ -113,7 +119,13 @@ class RecordController extends Controller
     {
         Gate::authorize('update', $record);
 
-        $record->update($request->validated());
+        $record->update($request->safe()->except(['images', 'files']));
+
+        collect($request->file('images'))
+            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('images'));
+
+        collect($request->file('files'))
+            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('files'));
 
         flash()
             ->option('position', 'bottom-right')

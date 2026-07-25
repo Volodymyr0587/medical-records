@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Enums\RecordStatus;
+use App\Rules\ValidDocumentFile;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -35,6 +36,12 @@ class RecordRequest extends FormRequest
                 'required',
                 Rule::enum(RecordStatus::class),
             ],
+
+            'images' => ['nullable', 'array'],
+            'images.*' => ['file', 'image', 'max:10240', 'mimes:jpg,jpeg,png,webp'],
+
+            'files' => ['nullable', 'array'],
+            'files.*' => ['file', 'max:20480', new ValidDocumentFile()],
         ];
     }
 

@@ -7,7 +7,8 @@
         <flux:separator variant="subtle" />
 
 
-        <form method="POST" action="{{ route('records.store') }}" class="flex flex-col gap-6">
+        <form method="POST" action="{{ route('records.store') }}" class="flex flex-col gap-6"
+            enctype="multipart/form-data">
             @csrf
             <!-- Name -->
             <flux:input name="name" :label="__('Name')" :value="old('name')" type="text" autofocus autocomplete="name"
@@ -32,6 +33,23 @@
                         :checked="old('status', $record->status->value ?? \App\Enums\RecordStatus::Planned->value) === $status->value" />
                 @endforeach
             </flux:radio.group>
+
+            <flux:field>
+                <flux:label>Images</flux:label>
+
+                <flux:input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/webp"
+                    class="flux-input" />
+
+                <flux:error name="images" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Files</flux:label>
+
+                <flux:input type="file" name="files[]" multiple class="flux-input" />
+
+                <flux:error name="files" />
+            </flux:field>
 
 
             <div class="items-center justify-end">
