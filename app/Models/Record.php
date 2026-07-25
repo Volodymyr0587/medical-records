@@ -24,6 +24,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Record extends Model implements HasMedia
 {
     use InteractsWithMedia;
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -43,7 +44,7 @@ class Record extends Model implements HasMedia
     {
         return $query->when(
             filled($search),
-            fn(Builder $query) => $query->where(function (Builder $query) use ($search) {
+            fn (Builder $query) => $query->where(function (Builder $query) use ($search) {
                 $query
                     ->whereLike('name', "%{$search}%")
                     ->orWhereLike('description', "%{$search}%");
@@ -56,7 +57,7 @@ class Record extends Model implements HasMedia
     {
         return $query->when(
             $status,
-            fn(Builder $query) => $query->where('status', $status)
+            fn (Builder $query) => $query->where('status', $status)
         );
     }
 
@@ -77,7 +78,7 @@ class Record extends Model implements HasMedia
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 'application/vnd.oasis.opendocument.text',
                 'application/vnd.ms-excel', // .xls
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx   
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
                 'application/vnd.oasis.opendocument.spreadsheet', // .ods
                 'text/markdown',
                 'text/plain',

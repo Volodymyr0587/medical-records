@@ -15,4 +15,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('records.media.destroy');
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

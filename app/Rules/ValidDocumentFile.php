@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules;
 
 use Closure;
@@ -9,7 +11,7 @@ use Illuminate\Translation\PotentiallyTranslatedString;
 
 class ValidDocumentFile implements ValidationRule
 {
-    private const ALLOWED_MIME_TYPES = [
+    private const array ALLOWED_MIME_TYPES = [
         'application/pdf',
         'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -28,13 +30,13 @@ class ValidDocumentFile implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!$value instanceof UploadedFile) {
+        if (! $value instanceof UploadedFile) {
             $fail('The :attribute must be a file.');
 
             return;
         }
 
-        if (!in_array($value->getMimeType(), self::ALLOWED_MIME_TYPES, true)) {
+        if (! in_array($value->getMimeType(), self::ALLOWED_MIME_TYPES, true)) {
             $fail('The :attribute must be a document (pdf, doc, docx, odt, md, txt).');
         }
     }

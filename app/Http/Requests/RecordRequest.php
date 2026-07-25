@@ -41,7 +41,7 @@ class RecordRequest extends FormRequest
             'images.*' => ['file', 'image', 'max:10240', 'mimes:jpg,jpeg,png,webp'],
 
             'files' => ['nullable', 'array'],
-            'files.*' => ['file', 'max:20480', new ValidDocumentFile()],
+            'files.*' => ['file', 'max:20480', new ValidDocumentFile],
         ];
     }
 

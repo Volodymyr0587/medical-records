@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class RecordController extends Controller
 {
@@ -78,10 +79,10 @@ class RecordController extends Controller
             ->create($request->safe()->except(['images', 'files']));
 
         collect($request->file('images'))
-            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('images'));
+            ->each(fn ($file) => $record->addMedia($file)->toMediaCollection('images'));
 
         collect($request->file('files'))
-            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('files'));
+            ->each(fn ($file) => $record->addMedia($file)->toMediaCollection('files'));
 
         flash()
             ->option('position', 'bottom-right')
@@ -122,10 +123,10 @@ class RecordController extends Controller
         $record->update($request->safe()->except(['images', 'files']));
 
         collect($request->file('images'))
-            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('images'));
+            ->each(fn (string|UploadedFile $file) => $record->addMedia($file)->toMediaCollection('images'));
 
         collect($request->file('files'))
-            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('files'));
+            ->each(fn (string|UploadedFile $file) => $record->addMedia($file)->toMediaCollection('files'));
 
         flash()
             ->option('position', 'bottom-right')
