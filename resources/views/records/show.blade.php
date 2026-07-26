@@ -73,17 +73,32 @@
             <ul class="divide-y">
                 @foreach ($record->getMedia('files') as $media)
                     <li class="flex items-center justify-between py-2">
+                        <a href="{{ route('records.media.show', [$record, $media]) }}" target="_blank"
+                            class="text-blue-600 hover:underline">
+                            <flux:badge color="{{ $record->status->color() }}" variant="solid" size="sm">
+                                {{ $media->human_readable_size }}
+                            </flux:badge>
+
+                            {{ $media->file_name }}
+                        </a>
+
                         @can('update', $record)
-                            <a href="{{ $media->getUrl() }}" target="_blank" class="text-blue-600 hover:underline">
-                                <flux:badge color="{{ $record->status->color() }}" variant="solid" size="sm">
-                                    {{ $media->human_readable_size }}
-                                </flux:badge>
-                                {{ $media->file_name }}
-                            </a>
-                            <form method="POST" action="{{ route('records.media.destroy', [$record, $media]) }}">
-                                @csrf @method('DELETE')
-                                <flux:button variant="danger" type="submit" size="xs">Delete</flux:button>
-                            </form>
+                            <div class="flex items-center gap-2">
+                                <flux:button href="{{ route('records.media.download', [$record, $media]) }}" variant="ghost"
+                                    size="xs" icon="arrow-down-tray">
+                                    Download
+                                </flux:button>
+
+                                <form method="POST" action="{{ route('records.media.destroy', [$record, $media]) }}">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <flux:button variant="danger" type="submit" size="xs" icon="trash"
+                                        onclick="return confirm('Are you sure you want to delete this media?')">
+                                        Delete
+                                    </flux:button>
+                                </form>
+                            </div>
                         @endcan
                     </li>
                 @endforeach
