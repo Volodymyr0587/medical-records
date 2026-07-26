@@ -25,7 +25,7 @@ class RecordMediaController extends Controller
         return response()->file(
             $media->getPath(),
             [
-                'Content-Type' => $media->mime_type . '; charset=UTF-8',
+                'Content-Type' => $media->mime_type.'; charset=UTF-8',
             ]
         );
     }
