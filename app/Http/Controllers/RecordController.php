@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\PartOfDay;
 use App\Enums\RecordStatus;
 use App\Http\Requests\StoreRecordRequest;
 use App\Http\Requests\UpdateRecordRequest;
@@ -37,7 +38,7 @@ class RecordController extends Controller
 
         $totalRecords = auth()->user()->records()->count();
 
-        $partOfDay = $this->getPartOfDay();
+        $partOfDay = PartOfDay::fromDateTime();
 
         return view('records.index', [
             'records' => $records,
@@ -47,18 +48,6 @@ class RecordController extends Controller
             'statusCounts' => $statusCounts,
             'totalRecords' => $totalRecords,
         ]);
-    }
-
-    private function getPartOfDay(): string
-    {
-        $time = now()->hour;
-
-        return match (true) {
-            $time >= 5 && $time < 12 => 'morning',
-            $time >= 12 && $time < 17 => 'afternoon',
-            $time >= 17 && $time < 21 => 'evening',
-            default => 'night',
-        };
     }
 
     /**
@@ -79,10 +68,10 @@ class RecordController extends Controller
             ->create($request->safe()->except(['images', 'files']));
 
         collect($request->file('images'))
-            ->each(fn ($file) => $record->addMedia($file)->toMediaCollection('images'));
+            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('images'));
 
         collect($request->file('files'))
-            ->each(fn ($file) => $record->addMedia($file)->toMediaCollection('files'));
+            ->each(fn($file) => $record->addMedia($file)->toMediaCollection('files'));
 
         flash()
             ->option('position', 'bottom-right')
@@ -123,10 +112,10 @@ class RecordController extends Controller
         $record->update($request->safe()->except(['images', 'files']));
 
         collect($request->file('images'))
-            ->each(fn (string|UploadedFile $file) => $record->addMedia($file)->toMediaCollection('images'));
+            ->each(fn(string|UploadedFile $file) => $record->addMedia($file)->toMediaCollection('images'));
 
         collect($request->file('files'))
-            ->each(fn (string|UploadedFile $file) => $record->addMedia($file)->toMediaCollection('files'));
+            ->each(fn(string|UploadedFile $file) => $record->addMedia($file)->toMediaCollection('files'));
 
         flash()
             ->option('position', 'bottom-right')

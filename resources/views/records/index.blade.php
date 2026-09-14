@@ -4,7 +4,10 @@
         {{-- Header --}}
         <div>
             <flux:heading size="xl" level="1">
-                Good {{ $partOfDay }}, {{ auth()->user()->name }}
+                <div class="flex items-center gap-x-2">
+                    <flux:icon :name="$partOfDay->icon()" />
+                    <span>Good {{ $partOfDay->label() }}, {{ auth()->user()->name }}</span>
+                </div>
             </flux:heading>
 
             <flux:text class="mt-2 text-base">

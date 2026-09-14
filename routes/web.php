@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RecordMediaController;
 use Illuminate\Support\Facades\Route;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('records', RecordController::class);
 
     Route::get('records/{record}/media/{media}', [RecordMediaController::class, 'show'])
@@ -22,4 +23,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('records.media.destroy');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
